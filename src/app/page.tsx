@@ -1,16 +1,19 @@
 "use client"
 
 import Button from "@/lib/components/Button"
+import CreateCharacterModal from "@/lib/components/CreateCharacterModal"
 import Heading from "@/lib/components/Heading"
 import Spinner from "@/lib/components/Spinner"
+import { useModal } from "@/lib/context/modalContext"
 import useProfile from "@/lib/hooks/useProfile"
-import { LogOut, MoveRight, User } from "lucide-react"
+import { LogOut, MoveRight, Plus, User } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
 export default function Home() {
 
   const { profile, isLoading } = useProfile()
+  const modal = useModal();
 
   if (isLoading) {
     return (
@@ -26,6 +29,10 @@ export default function Home() {
         <p>Sign in to view and create characters.</p>
       </div>
     )
+  }
+
+  function handleCreateCharacter() {
+    modal.show(<CreateCharacterModal />, "Create Character")
   }
 
   return (
@@ -44,7 +51,12 @@ export default function Home() {
           <div className="grow bg-zinc-950 rounded-lg p-4">
             <Heading rank={3} className="mb-3">Characters</Heading>
             {profile.characters.length === 0 ? (
-              <p>You haven&apos;t created any characters yet.</p>
+              <>
+                <p>You haven&apos;t created any characters yet.</p>
+                <Button onClick={handleCreateCharacter} icon={Plus} iconProps={{ size: 24 }} className="mt-4">
+                  Create Character
+                </Button>
+              </>
             ) : (
               <ul>
                 {profile.characters.map(char => (
