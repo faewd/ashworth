@@ -11,6 +11,7 @@ export async function createCharacter(name: string, owner: Doc<IUser>): Promise<
     id,
     name,
     owner,
+    publiclyVisible: false,
     species: "Human",
     class: "Fighter",
     level: 1,

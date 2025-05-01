@@ -10,6 +10,7 @@ import AbilitiesTable from "./AbilitiesTable"
 import { useCallback, useEffect, useState } from "react"
 import { CloudAlert, TriangleAlert } from "lucide-react"
 import Spinner from "@/lib/components/Spinner"
+import Checkbox from "@/lib/components/Checkbox"
 
 type SheetProps = {
   character: ICharacter
@@ -30,7 +31,7 @@ function debounce<T extends unknown[]>(f: (...args: T) => void, duration: number
 
 export default function Sheet({ character }: SheetProps) {
 
-  const { data, patch, patchText, patchNumeric } = usePatchable(character, () => setModified(true))
+  const { data, patch, patchText, patchNumeric, patchCheckbox } = usePatchable(character, () => setModified(true))
   const { name, owner, id } = data
  
   const [isModified, setModified] = useState(false)
@@ -82,9 +83,10 @@ export default function Sheet({ character }: SheetProps) {
               { error && <div className="text-rose-800 font-bold text-sm flex gap-2 items-center rounded-sm px-2 py-1 bg-rose-300"><TriangleAlert /> {error}</div> }
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 w-full">
             <Image src={owner.picture ?? `https://placehold.co/48x48?text=${owner.name?.charAt(0)}`} alt="Your profile picture" width={24} height={24} className="rounded-lg" />
             <span>{owner.name}</span>
+            <Checkbox label="Public?" checked={data.publiclyVisible} onChange={patchCheckbox((draft, value) => draft.publiclyVisible = value)} className="ml-auto" />
           </div>
         </section>
         <section className="grid grid-cols-3 gap-2 mt-8">

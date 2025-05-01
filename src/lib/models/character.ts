@@ -47,6 +47,7 @@ const AbilityScoresSchema = new mongoose.Schema<AbilityScores>({
 export interface ICharacter {
   id: string;
   owner: IUser;
+  publiclyVisible: boolean;
   name: string;
   species: string;
   class: string;
@@ -57,6 +58,7 @@ export interface ICharacter {
 export const CharacterSchema = new mongoose.Schema<ICharacter>({
   id: String,
   owner: { type: SchemaTypes.ObjectId, ref: "user" },
+  publiclyVisible: { type: Boolean, default: false },
   name: String,
   species: String,
   class: String,
