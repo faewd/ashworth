@@ -8,9 +8,10 @@ import TextInput from "../../../../lib/components/TextInput"
 import usePatchable from "@/lib/hooks/usePatchable"
 import AbilitiesTable from "./AbilitiesTable"
 import { useCallback, useEffect, useState } from "react"
-import { CloudAlert, TriangleAlert } from "lucide-react"
+import { Clipboard, ClipboardCheck, CloudAlert, TriangleAlert } from "lucide-react"
 import Spinner from "@/lib/components/Spinner"
 import Checkbox from "@/lib/components/Checkbox"
+import Button from "@/lib/components/Button"
 
 type SheetProps = {
   character: ICharacter
@@ -34,6 +35,14 @@ export default function Sheet({ character }: SheetProps) {
   const { data, patch, patchText, patchNumeric, patchCheckbox } = usePatchable(character, () => setModified(true))
   const { name, owner, id } = data
  
+  const [hasCopiedId, setHasCopiedId] = useState(false)
+
+  function copyId() {
+    navigator.clipboard.writeText(character.id)
+    setHasCopiedId(true)
+    setTimeout(() => setHasCopiedId(false), 5000)
+  }
+
   const [isModified, setModified] = useState(false)
   const [isSaving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -71,9 +80,12 @@ export default function Sheet({ character }: SheetProps) {
     <div className="flex justify-center">
       <article className="pt-8">
         <section>
-          <div className="flex justify-between items-center">
+          <div className="flex items-center">
             <Heading rank={1}>{name}</Heading>
-            <div>
+            <span className="text-xs font-semibold mt-2 rounded-sm bg-zinc-800 text-zinc-400 ms-4 px-1 py-px">{character.id}</span>
+            <Button onClick={copyId} icon={hasCopiedId ? ClipboardCheck : Clipboard} color={hasCopiedId ? "success" : "primary"} ghost className="ml-1 mt-1" />
+            { hasCopiedId && <span className="text-sm font-bold text-emerald-500 ml-2 mt-1">Copied ID to Clipboard</span> }
+            <div className="ml-auto">
               <div className="font-bold text-sm">
                 { isSaving ? <span className="text-zinc-400 flex gap-2 items-center"><Spinner /> Saving changes...</span>
                   : isModified ? <span className="text-rose-400 flex gap-2 items-center"><CloudAlert /> Unsaved changes</span>

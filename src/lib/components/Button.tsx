@@ -45,7 +45,7 @@ const btnColors = {
 }
 
 const ghostColors = {
-  "primary": "text-indigo-500 hover:text-indigo-400 hover:bg-indigo-600/15",
+  "primary": "text-indigo-300 hover:text-indigo-200 hover:bg-indigo-300/15",
   "secondary": "text-zinc-500 hover:text-zinc-400 hover:bg-zinc-500/15",
   "error": "text-rose-500 hover:text-rose-400 hover:bg-rose-500/15",
   "warn": "text-amber-500 hover:text-amber-400 hover:bg-amber-500/15",
