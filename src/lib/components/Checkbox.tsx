@@ -10,7 +10,7 @@ export default function Checkbox({ className, label, ...props }: CheckboxProps) 
   const input = <input type="checkbox" {...props} />
 
   if (label === undefined) {
-    return cloneElement(input, { className: cx(checkboxClasses, className) });
+    return cloneElement(input, { className: cx(checkboxClasses, className) })
   }
 
   return (

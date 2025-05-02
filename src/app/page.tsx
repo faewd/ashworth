@@ -13,7 +13,7 @@ import Link from "next/link"
 export default function Home() {
 
   const { profile, isLoading } = useProfile()
-  const modal = useModal();
+  const modal = useModal()
 
   if (isLoading) {
     return (
