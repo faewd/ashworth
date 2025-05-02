@@ -2,6 +2,7 @@ import { AbilityScore, AbilityScores } from "@/lib/models/character"
 import Checkbox from "@/lib/components/Checkbox"
 import TextInput from "@/lib/components/TextInput"
 import usePatchable from "@/lib/hooks/usePatchable"
+import Output from "@/lib/components/Output"
 
 type AbilitiesTableProps = {
   abilityScores: AbilityScores;
@@ -35,8 +36,8 @@ export default function AbilitiesTable({ abilityScores, onChange }: AbilitiesTab
             <td className="text-center pt-1"><TextInput value={base} onChange={patchNumeric((draft, value) => draft[ability].base = value)} className="text-center w-12" /></td>
             <td className="text-center pt-1 w-min"><TextInput value={bonus} onChange={patchNumeric((draft, value) => draft[ability].bonus = value)} className="text-center w-12" /></td>
             <td className="text-center pt-1 w-min"><TextInput value={tempBonus} onChange={patchNumeric((draft, value) => draft[ability].tempBonus = value)} className="text-center w-12" /></td>
-            <td className="text-center pt-1 font-bold text-indigo-300">{base + bonus + tempBonus}</td>
-            <td className="text-center pt-1 font-bold text-indigo-300">{Math.floor((base + bonus + tempBonus - 10) / 2) + (proficient ? 2 : 0)}</td>
+            <td className="text-center pt-1"><Output value={base + bonus + tempBonus} showSign className="w-12" /></td>
+            <td className="text-center pt-1"><Output value={Math.floor((base + bonus + tempBonus - 10) / 2) + (proficient ? 2 : 0)} showSign className="w-12" /></td>
           </tr>
         ))}
       </tbody>
