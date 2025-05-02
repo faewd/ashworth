@@ -8,7 +8,7 @@ type SpinnerProps = {
 }
 
 const spinnerColors = {
-  "primary": "text-indigo-500",
+  "primary": "text-indigo-300",
   "secondary": "text-zinc-500",
   "error": "text-rose-500",
   "warn": "text-amber-500",

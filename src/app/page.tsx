@@ -6,9 +6,13 @@ import Heading from "@/lib/components/Heading"
 import Spinner from "@/lib/components/Spinner"
 import { useModal } from "@/lib/context/modalContext"
 import useProfile from "@/lib/hooks/useProfile"
+import { ICharacter } from "@/lib/models/character"
+import cx from "@/lib/util/cx"
 import { LogOut, MoveRight, Plus, User } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 export default function Home() {
 
@@ -61,10 +65,7 @@ export default function Home() {
               <ul>
                 {profile.characters.map(char => (
                   <li key={char.id}>
-                    <Link href={`/sheet/${char.id}/${char.name}`} className="group bg-zinc-900 rounded p-2 font-semibold mb-1 block transition-colors hover:bg-zinc-800 flex justify-between items-center">
-                      {char.name}
-                      <MoveRight className="text-zinc-600 mr-1 group-hover:mr-0 group-hover:text-indigo-300 transition-all" />
-                    </Link>
+                    <CharacterLink char={char} />
                   </li>
                 ))}
               </ul>
@@ -73,5 +74,29 @@ export default function Home() {
         </div>
       </div>
     </div>
+  )
+}
+
+function CharacterLink({ char }: { char: Pick<ICharacter, "name" | "id"> }) {
+  const [navigating, setNavigating] = useState(false)
+  const router = useRouter()
+  
+  function handleClick() {
+    setNavigating(true)
+    router.push(`/sheet/${char.id}/${char.name}`)
+  }
+
+  return (
+    <button
+      role="link"
+      onClick={handleClick}
+      className={cx("group w-full bg-zinc-900 rounded p-2 font-semibold mb-1 block transition-colors hover:bg-zinc-800 flex justify-between items-center", { "bg-zinc-800 ": navigating })}
+    >
+      {char.name}
+      { navigating
+        ? <Spinner color="primary" className="mr-1" />
+        : <MoveRight className="text-zinc-600 mr-1 group-hover:mr-0 group-hover:text-indigo-300 transition-all" />
+      }
+    </button>
   )
 }
