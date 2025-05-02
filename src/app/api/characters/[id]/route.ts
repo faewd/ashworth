@@ -2,7 +2,7 @@ import { getCharacter, updateCharacter } from "@/lib/service/character"
 import { getCurrentUser } from "@/lib/service/user"
 
 type RouteProps = {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 export async function PATCH(req: Request, { params }: RouteProps) {

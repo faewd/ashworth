@@ -5,10 +5,10 @@ import { getCurrentUser } from "@/lib/service/user"
 import { redirect } from "next/navigation"
 
 type SheetPageProps = {
-  params: {
+  params: Promise<{
     id: string,
     name: string
-  }
+  }>
 }
 
 export default async function SheetPage({ params }: SheetPageProps) {
