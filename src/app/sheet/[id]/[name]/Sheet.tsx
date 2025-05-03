@@ -2,7 +2,6 @@
 
 import { ICharacter } from "../../../../lib/models/character"
 import Image from "next/image"
-import Heading from "../../../../lib/components/Heading"
 import InputGroup from "../../../../lib/components/InputGroup"
 import TextInput from "../../../../lib/components/TextInput"
 import usePatchable from "@/lib/hooks/usePatchable"

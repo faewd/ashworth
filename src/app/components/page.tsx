@@ -1,9 +1,9 @@
 "use client"
 
-import Alert from "@/lib/components/Alert";
-import Button from "@/lib/components/Button";
-import Heading from "@/lib/components/Heading";
-import Spinner from "@/lib/components/Spinner";
+import Alert from "@/lib/components/Alert"
+import Button from "@/lib/components/Button"
+import Heading from "@/lib/components/Heading"
+import Spinner from "@/lib/components/Spinner"
 
 
 export default function ComponentsPage() {

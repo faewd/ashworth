@@ -1,9 +1,9 @@
 "use client"
 
-import Button from "@/lib/components/Button";
-import Heading from "@/lib/components/Heading";
-import TextInput from "@/lib/components/TextInput";
-import { Save } from "lucide-react";
+import Button from "@/lib/components/Button"
+import Heading from "@/lib/components/Heading"
+import TextInput from "@/lib/components/TextInput"
+import { Save } from "lucide-react"
 import { ChangeEventHandler, useEffect, useRef, useState } from "react"
 
 type NameFieldProps = {
