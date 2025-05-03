@@ -12,6 +12,7 @@ import { Clipboard, ClipboardCheck, CloudAlert, TriangleAlert } from "lucide-rea
 import Spinner from "@/lib/components/Spinner"
 import Checkbox from "@/lib/components/Checkbox"
 import Button from "@/lib/components/Button"
+import NameField from "./NameField"
 
 type SheetProps = {
   character: ICharacter
@@ -81,7 +82,7 @@ export default function Sheet({ character }: SheetProps) {
       <article className="pt-8">
         <section>
           <div className="flex items-center">
-            <Heading rank={1}>{name}</Heading>
+            <NameField value={character.name} onChange={patch((draft, value) => draft.name = value)} />
             <span className="text-xs font-semibold mt-2 rounded-sm bg-zinc-800 text-zinc-400 ms-4 px-1 py-px">{character.id}</span>
             <Button onClick={copyId} icon={hasCopiedId ? ClipboardCheck : Clipboard} color={hasCopiedId ? "success" : "primary"} ghost className="ml-1 mt-1" />
             { hasCopiedId && <span className="text-sm font-bold text-emerald-500 ml-2 mt-1">Copied ID to Clipboard</span> }
