@@ -93,13 +93,11 @@ export default function SheetComponent({ character }: SheetProps) {
             <Button onClick={copyId} icon={hasCopiedId ? ClipboardCheck : Clipboard} color={hasCopiedId ? "success" : "primary"} ghost className="ml-1 mt-1" />
             { hasCopiedId && <span className="text-sm font-bold text-emerald-500 ml-2 mt-1">Copied ID to Clipboard</span> }
             <div className="ml-auto">
-              <div className="font-bold text-sm">
-                { isSaving ? <span className="text-zinc-400 flex gap-2 items-center"><Spinner /> Saving changes...</span>
-                  : isModified ? <span className="text-rose-400 flex gap-2 items-center"><CloudAlert /> Unsaved changes</span>
-                  : null
-                }
-              </div>
-              { error && <div className="text-rose-800 font-bold text-sm flex gap-2 items-center rounded-sm px-2 py-1 bg-rose-300"><TriangleAlert /> {error}</div> }
+              { error ? <div className="text-rose-800 font-bold text-sm flex gap-2 items-center rounded-sm px-2 py-1 bg-rose-300"><TriangleAlert /> {error}</div>
+                : isSaving ? <span className="text-zinc-400 flex gap-2 items-center font-bold text-sm"><Spinner /> Saving changes...</span>
+                : isModified ? <span className="text-rose-400 flex gap-2 items-center font-bold text-sm"><CloudAlert /> Unsaved changes</span>
+                : null
+              }
             </div>
           </div>
           <div className="flex items-center gap-2 w-full">
