@@ -2,16 +2,6 @@ import mongoose, { FlatRecord, Model, SchemaOptions, SchemaTypes } from "mongoos
 import { IUser } from "./user"
 import { ensureDB } from "../db"
 
-function excludeMongoId<T>(): SchemaOptions<FlatRecord<T>> {
-  return {
-    toJSON: {
-      transform(_, ret) {
-        delete ret._id
-      },
-    },
-  }
-}
-
 export interface AbilityScore {
   base: number
   bonus: number
@@ -24,7 +14,7 @@ const AbilityScoreSchema = new mongoose.Schema<AbilityScore>({
   bonus: { type: Number, default: 0 },
   tempBonus: { type: Number, default: 0 },
   proficient: { type: Boolean, default: false },
-}, excludeMongoId())
+}, { _id: false })
 
 export interface AbilityScores {
   str: AbilityScore;
@@ -42,7 +32,7 @@ const AbilityScoresSchema = new mongoose.Schema<AbilityScores>({
   int: AbilityScoreSchema,
   wis: AbilityScoreSchema,
   cha: AbilityScoreSchema,
-}, excludeMongoId())
+}, { _id: false })
 
 export interface ICharacter {
   id: string;
@@ -64,7 +54,7 @@ export const CharacterSchema = new mongoose.Schema<ICharacter>({
   class: String,
   level: Number,
   abilityScores: AbilityScoresSchema,
-}, excludeMongoId())
+})
 
 const db = await ensureDB()
 export const Character: Model<ICharacter> = db.models.character ?? db.model('character', CharacterSchema)

@@ -3,8 +3,9 @@ import { Character, ICharacter } from "../models/character"
 import { Doc } from "./doc"
 import { IUser } from "../models/user"
 import { nanoid } from "nanoid"
+import { Sheet } from "../sheet/sheet"
 
-export async function createCharacter(name: string, owner: Doc<IUser>): Promise<Doc<ICharacter>> {
+export async function createCharacter(name: string, owner: Doc<IUser>): Promise<Sheet> {
   await ensureDB()
   const id = nanoid()
   const newChar = new Character({
@@ -55,19 +56,21 @@ export async function createCharacter(name: string, owner: Doc<IUser>): Promise<
     },
   })
   const character = await newChar.save()
-  return character
+
+  return new Sheet(character.toObject())
 }
 
-export async function getCharacter(id: string): Promise<Doc<ICharacter> | null> {
+export async function getCharacter(id: string): Promise<Sheet | null> {
   await ensureDB()
   const character = await Character.findOne({ id }).populate("owner")
-  return character
+  if (character === null) return null;
+  return new Sheet(character.toObject())
 }
 
-export async function updateCharacter(id: string, char: Partial<ICharacter>): Promise<Doc<ICharacter>> {
+export async function updateCharacter(id: string, char: Partial<ICharacter>): Promise<Sheet> {
   await ensureDB()
   delete char.owner
   const updated = await Character.findOneAndUpdate({ id: id }, char).populate("owner")
   if (updated === null) throw new Error("No such character")
-  return updated
+  return new Sheet(updated.toObject())
 }

@@ -4,7 +4,8 @@ import { IUser, User } from "@/lib/models/user"
 import { Doc } from "./doc"
 
 import "@/lib/models/character"
-import { Character, ICharacter } from "@/lib/models/character"
+import { Character } from "@/lib/models/character"
+import { Sheet } from "../sheet/sheet"
 
 export async function getCurrentUser(): Promise<Doc<IUser> | null> {
   await ensureDB()
@@ -20,15 +21,15 @@ export async function getCurrentUser(): Promise<Doc<IUser> | null> {
 }
 
 export type Profile = IUser & {
-  characters: Omit<ICharacter, "owner">[]
+  characters: Sheet[]
 }
 
 export async function getUserProfile(): Promise<Profile | null> {
   const user = await getCurrentUser()
   if (user === null) return null
-  const characters = await Character.find({ owner: user }).select("-owner")
+  const characters = await Character.find({ owner: user })
   return {
-    ...user.toObject(),
-    characters: characters.map(char => char.toObject()),
+    ...user.toJSON(),
+    characters: characters.map(char => new Sheet(char.toJSON())),
   }
 }

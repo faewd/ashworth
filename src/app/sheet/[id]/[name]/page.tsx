@@ -24,5 +24,5 @@ export default async function SheetPage({ params }: SheetPageProps) {
 
   if (char.name !== name) redirect(`/sheet/${char.id}/${char.name}`)
 
-  return <Sheet character={char.toJSON({ transform(_, ret) { delete ret._id } })} />
+  return <Sheet character={char.toJSON()} />
 }
