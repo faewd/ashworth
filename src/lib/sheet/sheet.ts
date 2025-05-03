@@ -1,18 +1,24 @@
-import { AbilityScore, AbilityScores, ICharacter } from "../models/character";
-import { IUser } from "../models/user";
+import { AbilityScore, AbilityScores, ICharacter } from "../models/character"
+import { IUser } from "../models/user"
 
-type ResolvedAbilityScores = {
-  [key in keyof AbilityScores]: AbilityScore & {
-    totalBonus: number;
-    score: number;
-    modifier: number;
-    save: number;
-  }
+export type ResolvedAbilityScore = AbilityScore & {
+  totalBonus: number;
+  score: number;
+  modifier: number;
+  save: number;
 }
 
-export class Sheet implements ICharacter {
+export type ResolvedAbilityScores = {
+  [key in keyof AbilityScores]: ResolvedAbilityScore
+}
+
+export interface ISheet extends ICharacter {
+  abilityScores: ResolvedAbilityScores
+}
+
+export class Sheet implements ISheet {
   constructor(
-    public readonly data: ICharacter
+    public readonly data: ICharacter,
   ) {}
 
   get id(): string {
@@ -60,7 +66,7 @@ export class Sheet implements ICharacter {
         totalBonus,
         score,
         modifier,
-        save
+        save,
       }]
     })
     return Object.fromEntries(resolved)
@@ -71,7 +77,7 @@ export class Sheet implements ICharacter {
       "PB": this.proficiencyBonus,
       "LEVEL": this.level,
       "LVL": this.level,
-      ...this.getAbilityStats()
+      ...this.getAbilityStats(),
     }
   }
 
@@ -96,7 +102,7 @@ export class Sheet implements ICharacter {
       owner: {
         id: this.owner.id,
         name: this.owner.name,
-        picture: this.owner.picture
+        picture: this.owner.picture,
       },
       publiclyVisible: this.publiclyVisible,
       species: this.species,
@@ -104,7 +110,7 @@ export class Sheet implements ICharacter {
       level: this.level,
       proficiencyBonus: this.proficiencyBonus,
       abilityScores: this.abilityScores,
-      stats: this.getStatRecord()
+      stats: this.getStatRecord(),
     }
   }
 }

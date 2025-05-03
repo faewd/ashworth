@@ -63,7 +63,7 @@ export async function createCharacter(name: string, owner: Doc<IUser>): Promise<
 export async function getCharacter(id: string): Promise<Sheet | null> {
   await ensureDB()
   const character = await Character.findOne({ id }).populate("owner")
-  if (character === null) return null;
+  if (character === null) return null
   return new Sheet(character.toObject())
 }
 

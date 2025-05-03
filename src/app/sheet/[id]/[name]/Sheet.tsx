@@ -12,10 +12,10 @@ import Spinner from "@/lib/components/Spinner"
 import Checkbox from "@/lib/components/Checkbox"
 import Button from "@/lib/components/Button"
 import NameField from "./NameField"
-import { useRouter } from "next/navigation"
+import { ISheet } from "@/lib/sheet/sheet"
 
 type SheetProps = {
-  character: ICharacter
+  character: ISheet
 }
 
 function debounce<T extends unknown[]>(f: (...args: T) => void, duration: number) {

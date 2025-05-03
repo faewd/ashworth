@@ -1,4 +1,4 @@
-import mongoose, { FlatRecord, Model, SchemaOptions, SchemaTypes } from "mongoose"
+import mongoose, { Model, SchemaTypes } from "mongoose"
 import { IUser } from "./user"
 import { ensureDB } from "../db"
 
