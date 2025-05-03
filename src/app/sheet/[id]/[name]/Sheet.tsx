@@ -12,7 +12,7 @@ import Spinner from "@/lib/components/Spinner"
 import Checkbox from "@/lib/components/Checkbox"
 import Button from "@/lib/components/Button"
 import NameField from "./NameField"
-import { ISheet } from "@/lib/sheet/sheet"
+import { ISheet, Sheet } from "@/lib/sheet/sheet"
 
 type SheetProps = {
   character: ISheet
@@ -31,10 +31,15 @@ function debounce<T extends unknown[]>(f: (...args: T) => void, duration: number
  
 }
 
-export default function Sheet({ character }: SheetProps) {
+export default function SheetComponent({ character }: SheetProps) {
 
-  const { data, patch, patchText, patchNumeric, patchCheckbox } = usePatchable(character, () => setModified(true))
-  const { owner, id } = data
+  const [sheet, setSheet] = useState(new Sheet(character))
+  const patchable = usePatchable(character, (newData) => {
+    setSheet(new Sheet(newData))
+    setModified(true)
+  })
+
+  const { data, patch, patchText, patchNumeric, patchCheckbox } = patchable
  
   const [hasCopiedId, setHasCopiedId] = useState(false)
 
@@ -51,7 +56,7 @@ export default function Sheet({ character }: SheetProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const save = useCallback(debounce((data: ICharacter) => {
     setSaving(true)
-    fetch(`/api/characters/${id}`, {
+    fetch(`/api/characters/${sheet.id}`, {
       method: "PATCH",
       body: JSON.stringify(data),
     })
@@ -60,7 +65,7 @@ export default function Sheet({ character }: SheetProps) {
         throw await res.json()
       })
       .then((newData) => {
-        window.history.replaceState(null, "", `/sheet/${id}/${newData.name}`)
+        window.history.replaceState(null, "", `/sheet/${sheet.id}/${newData.name}`)
         setError(null)
         setModified(false)
         setTimeout(() => setSaving(false), 1000)
@@ -83,8 +88,8 @@ export default function Sheet({ character }: SheetProps) {
       <article className="pt-8">
         <section>
           <div className="flex items-center">
-            <NameField value={character.name} onChange={patch((draft, value) => draft.name = value)} />
-            <span className="text-xs font-semibold mt-2 rounded-sm bg-zinc-800 text-zinc-400 ms-4 px-1 py-px">{character.id}</span>
+            <NameField value={sheet.name} onChange={patch((draft, value) => draft.name = value)} />
+            <span className="text-xs font-semibold mt-2 rounded-sm bg-zinc-800 text-zinc-400 ms-4 px-1 py-px">{sheet.id}</span>
             <Button onClick={copyId} icon={hasCopiedId ? ClipboardCheck : Clipboard} color={hasCopiedId ? "success" : "primary"} ghost className="ml-1 mt-1" />
             { hasCopiedId && <span className="text-sm font-bold text-emerald-500 ml-2 mt-1">Copied ID to Clipboard</span> }
             <div className="ml-auto">
@@ -98,24 +103,24 @@ export default function Sheet({ character }: SheetProps) {
             </div>
           </div>
           <div className="flex items-center gap-2 w-full">
-            <Image src={owner.picture ?? `https://placehold.co/48x48?text=${owner.name?.charAt(0)}`} alt="Your profile picture" width={24} height={24} className="rounded-lg" />
-            <span>{owner.name}</span>
-            <Checkbox label="Public?" checked={data.publiclyVisible} onChange={patchCheckbox((draft, value) => draft.publiclyVisible = value)} className="ml-auto" />
+            <Image src={sheet.owner.picture ?? `https://placehold.co/48x48?text=${sheet.owner.name?.charAt(0)}`} alt="Your profile picture" width={24} height={24} className="rounded-lg" />
+            <span>{sheet.owner.name}</span>
+            <Checkbox label="Public?" checked={sheet.publiclyVisible} onChange={patchCheckbox((draft, value) => draft.publiclyVisible = value)} className="ml-auto" />
           </div>
         </section>
         <section className="grid grid-cols-3 gap-2 mt-8">
           <InputGroup label="Species">
-            <TextInput value={data.species} onChange={patchText((draft, value) => draft.species = value)} />
+            <TextInput value={sheet.species} onChange={patchText((draft, value) => draft.species = value)} />
           </InputGroup>
           <InputGroup label="Class">
-            <TextInput value={data.class} onChange={patchText((draft, value) => draft.class = value)} />
+            <TextInput value={sheet.class} onChange={patchText((draft, value) => draft.class = value)} />
           </InputGroup>
           <InputGroup label="Level">
-            <TextInput value={data.level} onChange={patchNumeric((draft, value) => draft.level = value)} />
+            <TextInput value={sheet.level} onChange={patchNumeric((draft, value) => draft.level = value)} />
           </InputGroup>
         </section>
         <section className="mt-6 grid grid-cols-2">
-          <AbilitiesTable abilityScores={data.abilityScores} onChange={patch((draft, value) => draft.abilityScores = value)}></AbilitiesTable>
+          <AbilitiesTable abilityScores={sheet.abilityScores} patchable={patchable}></AbilitiesTable>
         </section>
       </article>
     </div>
