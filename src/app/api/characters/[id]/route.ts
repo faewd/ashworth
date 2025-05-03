@@ -16,8 +16,10 @@ export async function PATCH(req: Request, { params }: RouteProps) {
 
   if (user === null || char.owner.id !== user.id) throw new Error("You don't have permission to edit that character.")
 
-  const updated = await updateCharacter(char.id, patch)
-  return Response.json(updated.toJSON())
+  await updateCharacter(char.id, patch)
+
+  const updated = await getCharacter(id)
+  return Response.json(updated!.toJSON())
 }
 
 export async function GET(_: Request, { params }: RouteProps) {

@@ -12,6 +12,7 @@ import Spinner from "@/lib/components/Spinner"
 import Checkbox from "@/lib/components/Checkbox"
 import Button from "@/lib/components/Button"
 import NameField from "./NameField"
+import { useRouter } from "next/navigation"
 
 type SheetProps = {
   character: ICharacter
@@ -58,7 +59,8 @@ export default function Sheet({ character }: SheetProps) {
         if (res.ok) return res.json()
         throw await res.json()
       })
-      .then(() => {
+      .then((newData) => {
+        window.history.replaceState(null, "", `/sheet/${id}/${newData.name}`)
         setError(null)
         setModified(false)
         setTimeout(() => setSaving(false), 1000)
