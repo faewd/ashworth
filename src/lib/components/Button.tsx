@@ -35,22 +35,22 @@ export type SubmitButtonProps = BaseButtonProps & {
 }
 
 const btnColors = {
-  "primary": "bg-indigo-800 hover:bg-indigo-700",
-  "secondary": "bg-zinc-800 hover:bg-zinc-700",
-  "error": "bg-rose-800 hover:bg-rose-700",
-  "warn": "bg-amber-800 hover:bg-amber-700",
-  "info": "bg-sky-800 hover:bg-sky-700",
-  "success": "bg-emerald-800 hover:bg-emerald-700",
-  "disabled": "bg-zinc-700 hover:bg-zinc-700 cursor-not-allowed",
+  "primary": "bg-indigo-400 hover:bg-indigo-300",
+  "secondary": "bg-zinc-700 hover:bg-zinc-600",
+  "error": "bg-rose-500 hover:bg-rose-400",
+  "warn": "bg-amber-500 hover:bg-amber-400",
+  "info": "bg-purple-400 hover:bg-purple-300",
+  "success": "bg-emerald-600 hover:bg-emerald-500",
+  "disabled": "bg-zinc-700 hover:bg-zinc-700 text-zinc-400 cursor-not-allowed",
 }
 
 const ghostColors = {
   "primary": "text-indigo-300 hover:text-indigo-200 hover:bg-indigo-300/15",
   "secondary": "text-zinc-500 hover:text-zinc-400 hover:bg-zinc-500/15",
-  "error": "text-rose-500 hover:text-rose-400 hover:bg-rose-500/15",
-  "warn": "text-amber-500 hover:text-amber-400 hover:bg-amber-500/15",
-  "info": "text-sky-500 hover:text-sky-400 hover:bg-sky-500/15",
-  "success": "text-emerald-500 hover:text-emerald-400 hover:bg-emerald-500/15",
+  "error": "text-rose-400 hover:text-rose-300 hover:bg-rose-400/15",
+  "warn": "text-amber-400 hover:text-amber-300 hover:bg-amber-400/15",
+  "info": "text-purple-300 hover:text-purple-200 hover:bg-purple-400/15",
+  "success": "text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/15",
   "disabled": "text-zinc-600 cursor-not-allowed",
 }
 
@@ -91,7 +91,7 @@ export default function Button(props: ButtonProps) {
   const colors = props.ghost ? ghostColors : btnColors
   const colorClasses = colors[props.disabled ? "disabled" : (props.color ?? "primary")]
 
-  return <B {...bProps} className={cx("flex gap-2 items-center rounded py-1 px-2 font-semibold cursor-pointer transition-colors", colorClasses, { "p-2": hasIcon && !props.children }, props.className)}>
+  return <B {...bProps} className={cx("flex gap-2 items-center justify-center rounded py-1 px-2 text-zinc-50 font-semibold cursor-pointer transition-colors", colorClasses, { "p-2": hasIcon && !props.children }, props.className)}>
     {hasIcon
       ? <>
           <props.icon {...Object.assign({}, { absoluteStrokeWidth: true, strokeWidth: 2.5, size: 16 }, props.iconProps ?? {})} />

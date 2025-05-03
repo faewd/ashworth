@@ -10,10 +10,10 @@ type SpinnerProps = {
 const spinnerColors = {
   "primary": "text-indigo-300",
   "secondary": "text-zinc-500",
-  "error": "text-rose-500",
-  "warn": "text-amber-500",
-  "info": "text-sky-500",
-  "success": "text-emerald-500",
+  "error": "text-rose-400",
+  "warn": "text-amber-400",
+  "info": "text-purple-300",
+  "success": "text-emerald-400",
 }
 
 export default function Spinner({ className, color }: SpinnerProps) {

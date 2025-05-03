@@ -1,5 +1,7 @@
-import { Draft, produce } from "immer"
+import { Draft, enablePatches, produceWithPatches } from "immer"
 import { ChangeEvent, useMemo, useState } from "react"
+
+enablePatches()
 
 type PatcherMaker<T> = <R>(f: PatchFunc<T, R>) => Patcher<R>
 type PatchFunc<T, R> = (draft: Draft<T>, value: R) => void
@@ -11,9 +13,11 @@ export default function usePatchable<T>(initialData: T, onChange?: (data: T) => 
   const patch = useMemo<PatcherMaker<T>>(() => {
     return f => {
       return value => {
-        const next = produce(data, draft => { f(draft, value) })
-        setData(next)
-        onChange?.(next)
+        const [next, patches] = produceWithPatches(data, draft => { f(draft, value) })
+        if (patches.length > 0) {
+          setData(next)
+          onChange?.(next)
+        }
       }
     }
   }, [data, onChange]) 

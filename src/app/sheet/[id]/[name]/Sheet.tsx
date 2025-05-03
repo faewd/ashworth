@@ -34,7 +34,7 @@ function debounce<T extends unknown[]>(f: (...args: T) => void, duration: number
 export default function Sheet({ character }: SheetProps) {
 
   const { data, patch, patchText, patchNumeric, patchCheckbox } = usePatchable(character, () => setModified(true))
-  const { name, owner, id } = data
+  const { owner, id } = data
  
   const [hasCopiedId, setHasCopiedId] = useState(false)
 
