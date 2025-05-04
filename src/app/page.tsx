@@ -7,6 +7,7 @@ import Spinner from "@/lib/components/Spinner"
 import { useModal } from "@/lib/context/modalContext"
 import useProfile from "@/lib/hooks/useProfile"
 import { ICharacter } from "@/lib/models/character"
+import { ISheet } from "@/lib/sheet/sheet"
 import cx from "@/lib/util/cx"
 import { LogOut, MoveRight, Plus, User } from "lucide-react"
 import Image from "next/image"
@@ -76,7 +77,7 @@ export default function Home() {
   )
 }
 
-function CharacterLink({ char }: { char: Pick<ICharacter, "name" | "id"> }) {
+function CharacterLink({ char }: { char: ISheet }) {
   const [navigating, setNavigating] = useState(false)
   const router = useRouter()
   
@@ -89,9 +90,12 @@ function CharacterLink({ char }: { char: Pick<ICharacter, "name" | "id"> }) {
     <button
       role="link"
       onClick={handleClick}
-      className={cx("group w-full bg-zinc-900 rounded p-2 font-semibold mb-1 block transition-colors hover:bg-zinc-800 flex justify-between items-center", { "bg-zinc-800 ": navigating })}
+      className={cx("group w-full cursor-pointer bg-zinc-900 rounded p-2 mb-1 block transition-colors hover:bg-zinc-800 flex justify-between items-center", { "bg-zinc-800 ": navigating })}
     >
-      {char.name}
+      <div className="text-left leading-5">
+        <Heading rank={3} className="text-md">{char.name}</Heading>
+        <span className="italic text-sm text-zinc-400">Lvl. {char.level} {char.species} {char.class}</span>
+      </div>
       { navigating
         ? <Spinner color="primary" className="mr-1" />
         : <MoveRight className="text-zinc-600 mr-1 group-hover:mr-0 group-hover:text-indigo-300 transition-all" />
