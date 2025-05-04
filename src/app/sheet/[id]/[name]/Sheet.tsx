@@ -56,7 +56,7 @@ export default function SheetComponent({ character, readonly }: SheetProps) {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const save = useCallback(debounce((data: ICharacter) => {
-    if (readonly) return;
+    if (readonly) return
     setSaving(true)
     fetch(`/api/characters/${sheet.id}`, {
       method: "PATCH",
