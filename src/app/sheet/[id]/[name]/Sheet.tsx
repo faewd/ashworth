@@ -15,7 +15,8 @@ import NameField from "./NameField"
 import { ISheet, Sheet } from "@/lib/sheet/sheet"
 
 type SheetProps = {
-  character: ISheet
+  character: ISheet,
+  readonly: boolean
 }
 
 function debounce<T extends unknown[]>(f: (...args: T) => void, duration: number) {
@@ -31,7 +32,7 @@ function debounce<T extends unknown[]>(f: (...args: T) => void, duration: number
  
 }
 
-export default function SheetComponent({ character }: SheetProps) {
+export default function SheetComponent({ character, readonly }: SheetProps) {
 
   const [sheet, setSheet] = useState(new Sheet(character))
   const patchable = usePatchable(character, (newData) => {
@@ -55,6 +56,7 @@ export default function SheetComponent({ character }: SheetProps) {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const save = useCallback(debounce((data: ICharacter) => {
+    if (readonly) return;
     setSaving(true)
     fetch(`/api/characters/${sheet.id}`, {
       method: "PATCH",
@@ -88,37 +90,39 @@ export default function SheetComponent({ character }: SheetProps) {
       <article className="pt-8">
         <section>
           <div className="flex items-center">
-            <NameField value={sheet.name} onChange={patch((draft, value) => draft.name = value)} />
+            <NameField value={sheet.name} onChange={patch((draft, value) => draft.name = value)} readonly={readonly} />
             <span className="text-xs font-semibold mt-2 rounded-sm bg-zinc-800 text-zinc-400 ms-4 px-1 py-px">{sheet.id}</span>
             <Button onClick={copyId} icon={hasCopiedId ? ClipboardCheck : Clipboard} color={hasCopiedId ? "success" : "primary"} ghost className="ml-1 mt-1" />
             { hasCopiedId && <span className="text-sm font-bold text-emerald-500 ml-2 mt-1">Copied ID to Clipboard</span> }
-            <div className="ml-auto">
-              { error ? <div className="text-rose-800 font-bold text-sm flex gap-2 items-center rounded-sm px-2 py-1 bg-rose-300"><TriangleAlert /> {error}</div>
-                : isSaving ? <span className="text-zinc-400 flex gap-2 items-center font-bold text-sm"><Spinner /> Saving changes...</span>
-                : isModified ? <span className="text-rose-400 flex gap-2 items-center font-bold text-sm"><CloudAlert /> Unsaved changes</span>
-                : null
-              }
-            </div>
+            {!readonly && (
+              <div className="ml-auto">
+                { error ? <div className="text-rose-800 font-bold text-sm flex gap-2 items-center rounded-sm px-2 py-1 bg-rose-300"><TriangleAlert /> {error}</div>
+                  : isSaving ? <span className="text-zinc-400 flex gap-2 items-center font-bold text-sm"><Spinner /> Saving changes...</span>
+                  : isModified ? <span className="text-rose-400 flex gap-2 items-center font-bold text-sm"><CloudAlert /> Unsaved changes</span>
+                  : null
+                }
+              </div>
+            )}
           </div>
           <div className="flex items-center gap-2 w-full">
             <Image src={sheet.owner.picture ?? `https://placehold.co/48x48?text=${sheet.owner.name?.charAt(0)}`} alt="Your profile picture" width={24} height={24} className="rounded-lg" />
             <span>{sheet.owner.name}</span>
-            <Checkbox label="Public?" checked={sheet.publiclyVisible} onChange={patchCheckbox((draft, value) => draft.publiclyVisible = value)} className="ml-auto" />
+            {!readonly && <Checkbox label="Public?" checked={sheet.publiclyVisible} onChange={patchCheckbox((draft, value) => draft.publiclyVisible = value)} className="ml-auto" />}
           </div>
         </section>
         <section className="grid grid-cols-3 gap-2 mt-8">
           <InputGroup label="Species">
-            <TextInput value={sheet.species} onChange={patchText((draft, value) => draft.species = value)} />
+            <TextInput value={sheet.species} onChange={patchText((draft, value) => draft.species = value)} readOnly={readonly} />
           </InputGroup>
           <InputGroup label="Class">
-            <TextInput value={sheet.class} onChange={patchText((draft, value) => draft.class = value)} />
+            <TextInput value={sheet.class} onChange={patchText((draft, value) => draft.class = value)} readOnly={readonly} />
           </InputGroup>
           <InputGroup label="Level">
-            <TextInput value={sheet.level} onChange={patchNumeric((draft, value) => draft.level = value)} />
+            <TextInput value={sheet.level} onChange={patchNumeric((draft, value) => draft.level = value)} readOnly={readonly} />
           </InputGroup>
         </section>
         <section className="mt-6 grid grid-cols-2">
-          <AbilitiesTable abilityScores={sheet.abilityScores} patchable={patchable}></AbilitiesTable>
+          <AbilitiesTable abilityScores={sheet.abilityScores} patchable={patchable} readonly={readonly} />
         </section>
       </article>
     </div>

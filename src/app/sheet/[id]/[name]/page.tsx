@@ -20,11 +20,11 @@ export default async function SheetPage({ params }: SheetPageProps) {
 
   if (user === null) return <Alert color="error">You must be logged in to view character sheets.</Alert>
   
-  if (char === null || char.owner.id !== user.id) return <Alert color="error">No character exists with ID &quot;{id}&quot;</Alert>
+  if (char === null || (!char.publiclyVisible && char.owner.id !== user.id)) return <Alert color="error">No character exists with ID &quot;{id}&quot;</Alert>
 
   if (char.name !== decodeURIComponent(name)) {
     redirect(`/sheet/${char.id}/${char.name}`)
   }
 
-  return <Sheet character={char.toJSON()} />
+  return <Sheet character={char.toJSON()} readonly={char.owner.id !== user.id} />
 }

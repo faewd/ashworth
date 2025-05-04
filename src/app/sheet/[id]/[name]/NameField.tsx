@@ -8,10 +8,11 @@ import { useState } from "react"
 
 type NameFieldProps = {
   value: string;
-  onChange: (value: string) => void
+  onChange: (value: string) => void;
+  readonly: boolean;
 }
 
-export default function NameField({ value: initialValue, onChange }: NameFieldProps) {
+export default function NameField({ value: initialValue, onChange, readonly }: NameFieldProps) {
 
   const [value, setValue] = useState(initialValue)
   const [editing, setEditing] = useState(false)
@@ -25,7 +26,7 @@ export default function NameField({ value: initialValue, onChange }: NameFieldPr
     onChange(value.trim())
   }
 
-  if (editing) {
+  if (editing && !readonly) {
     return (
       <div className="flex gap-1 items-center mb-1">
         <TextInput value={value} onChange={(e) => setValue(e.currentTarget.value)} autoFocus />

@@ -6,10 +6,11 @@ import { ISheet, ResolvedAbilityScore, ResolvedAbilityScores } from "@/lib/sheet
 
 type AbilitiesTableProps = {
   abilityScores: ResolvedAbilityScores;
-  patchable: Patchable<ISheet>
+  patchable: Patchable<ISheet>;
+  readonly: boolean;
 }
 
-export default function AbilitiesTable({ abilityScores, patchable }: AbilitiesTableProps) {
+export default function AbilitiesTable({ abilityScores, patchable, readonly }: AbilitiesTableProps) {
 
   const { patchCheckbox, patchNumeric } = patchable
 
@@ -32,11 +33,11 @@ export default function AbilitiesTable({ abilityScores, patchable }: AbilitiesTa
       <tbody>
         {entries.map(([ability, { proficient, base, bonus, tempBonus, score, modifier, save }]) => (
           <tr key={ability}>
-            <td className="text-center pt-1"><Checkbox checked={proficient} onChange={patchCheckbox((draft, value) => draft.abilityScores[ability].proficient = value)} /></td>
+            <td className="text-center pt-1"><Checkbox checked={proficient} onChange={patchCheckbox((draft, value) => draft.abilityScores[ability].proficient = value)} readonly={readonly} /></td>
             <td className="text-center pt-1 uppercase font-bold">{ability}</td>
-            <td className="text-center pt-1"><TextInput value={base} onChange={patchNumeric((draft, value) => draft.abilityScores[ability].base = value)} className="text-center w-12" /></td>
-            <td className="text-center pt-1 w-min"><TextInput value={bonus} onChange={patchNumeric((draft, value) => draft.abilityScores[ability].bonus = value)} className="text-center w-12" /></td>
-            <td className="text-center pt-1 w-min"><TextInput value={tempBonus} onChange={patchNumeric((draft, value) => draft.abilityScores[ability].tempBonus = value)} className="text-center w-12" /></td>
+            <td className="text-center pt-1"><TextInput value={base} onChange={patchNumeric((draft, value) => draft.abilityScores[ability].base = value)} className="text-center w-12" readOnly={readonly} /></td>
+            <td className="text-center pt-1 w-min"><TextInput value={bonus} onChange={patchNumeric((draft, value) => draft.abilityScores[ability].bonus = value)} className="text-center w-12" readOnly={readonly} /></td>
+            <td className="text-center pt-1 w-min"><TextInput value={tempBonus} onChange={patchNumeric((draft, value) => draft.abilityScores[ability].tempBonus = value)} className="text-center w-12" readOnly={readonly} /></td>
             <td className="text-center pt-1"><Output value={score} className="w-12" /></td>
             <td className="text-center pt-1"><Output value={modifier} showSign className="w-12" /></td>
             <td className="text-center pt-1"><Output value={save} showSign className="w-12" /></td>
