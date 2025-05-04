@@ -24,8 +24,10 @@ export type ResolvedSkills = {
 }
 
 export interface ISheet extends ICharacter {
+  proficiencyBonus: number;
   abilityScores: ResolvedAbilityScores;
   skills: ResolvedSkills;
+  stats: Record<string, number>;
 }
 
 export class Sheet implements ISheet {
@@ -55,6 +57,14 @@ export class Sheet implements ISheet {
 
   get class(): string {
     return this.data.class
+  }
+
+  get subclass(): string {
+    return this.data.subclass
+  }
+
+  get background(): string {
+    return this.data.background
   }
 
   get level(): number {
@@ -104,7 +114,7 @@ export class Sheet implements ISheet {
     return Object.fromEntries(resolved)
   }
 
-  private getStatRecord(): Record<string, number> {
+  get stats(): Record<string, number> {
     return {
       "PB": this.proficiencyBonus,
       "LEVEL": this.level,
@@ -142,7 +152,7 @@ export class Sheet implements ISheet {
     return Object.fromEntries(flat)
   }
 
-  public toJSON(): ISheet & { proficiencyBonus: number; stats: Record<string, number> } {
+  public toJSON(): ISheet {
     return {
       id: this.id,
       name: this.name,
@@ -154,11 +164,13 @@ export class Sheet implements ISheet {
       publiclyVisible: this.publiclyVisible,
       species: this.species,
       class: this.class,
+      subclass: this.subclass,
+      background: this.background,
       level: this.level,
       proficiencyBonus: this.proficiencyBonus,
       abilityScores: this.abilityScores,
       skills: this.skills,
-      stats: this.getStatRecord(),
+      stats: this.stats,
     }
   }
 }

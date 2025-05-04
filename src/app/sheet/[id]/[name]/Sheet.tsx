@@ -111,15 +111,21 @@ export default function SheetComponent({ character, readonly }: SheetProps) {
             {!readonly && <Checkbox label="Public?" checked={sheet.publiclyVisible} onChange={patchCheckbox((draft, value) => draft.publiclyVisible = value)} className="ml-auto" />}
           </div>
         </section>
-        <section className="grid grid-cols-3 gap-2 mt-8">
+        <section className="grid grid-cols-[min-content_repeat(4,1fr)] gap-2 mt-8">
+          <InputGroup label="Level">
+            <TextInput className="w-12 text-center" value={sheet.level} onChange={patchNumeric((draft, value) => draft.level = value)} readOnly={readonly} />
+          </InputGroup>
           <InputGroup label="Species">
             <TextInput value={sheet.species} onChange={patchText((draft, value) => draft.species = value)} readOnly={readonly} />
           </InputGroup>
           <InputGroup label="Class">
             <TextInput value={sheet.class} onChange={patchText((draft, value) => draft.class = value)} readOnly={readonly} />
           </InputGroup>
-          <InputGroup label="Level">
-            <TextInput value={sheet.level} onChange={patchNumeric((draft, value) => draft.level = value)} readOnly={readonly} />
+          <InputGroup label="Subclass">
+            <TextInput value={sheet.subclass} onChange={patchText((draft, value) => draft.subclass = value)} readOnly={readonly} />
+          </InputGroup>
+          <InputGroup label="Background">
+            <TextInput value={sheet.background} onChange={patchText((draft, value) => draft.background = value)} readOnly={readonly} />
           </InputGroup>
         </section>
         <section className="mt-6 grid grid-cols-2 gap-8">

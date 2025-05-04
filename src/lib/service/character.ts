@@ -1,5 +1,5 @@
 import { ensureDB } from "@/lib/db"
-import { Character, ICharacter, Proficiency } from "@/lib/models/character"
+import { Character, ICharacter, Proficiency, Skill } from "@/lib/models/character"
 import { Doc } from "./doc"
 import { IUser } from "@/lib/models/user"
 import { nanoid } from "nanoid"
@@ -16,6 +16,8 @@ export async function createCharacter(name: string, owner: Doc<IUser>): Promise<
     publiclyVisible: false,
     species: "Human",
     class: "Fighter",
+    subclass: "",
+    background: "Folk Hero",
     level: 1,
     abilityScores: {
       str: {
@@ -55,8 +57,8 @@ export async function createCharacter(name: string, owner: Doc<IUser>): Promise<
         proficient: false,
       },
     },
-    skills: Object.fromEntries(Object.keys(skills).map((skill) => [skill, { proficiency: Proficiency.NONE, tempBonus: 0 }])),
-  })
+    skills: Object.fromEntries(Object.keys(skills).map((skill) => [skill, { proficiency: Proficiency.NONE, tempBonus: 0 }])) as Record<keyof typeof skills, Skill>,
+  } satisfies ICharacter)
   const character = await newChar.save()
 
   return new Sheet(character.toObject())

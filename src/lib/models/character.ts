@@ -66,6 +66,8 @@ export interface ICharacter {
   name: string;
   species: string;
   class: string;
+  subclass: string;
+  background: string;
   level: number;
   abilityScores: AbilityScores;
   skills: Skills;
@@ -79,6 +81,8 @@ export const CharacterSchema = new mongoose.Schema<ICharacter>({
   species: String,
   class: String,
   level: Number,
+  subclass: String,
+  background: String,
   abilityScores: AbilityScoresSchema,
   skills: SkillsSchema,
 })
