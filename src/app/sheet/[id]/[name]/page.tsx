@@ -22,7 +22,9 @@ export default async function SheetPage({ params }: SheetPageProps) {
   
   if (char === null || char.owner.id !== user.id) return <Alert color="error">No character exists with ID &quot;{id}&quot;</Alert>
 
-  if (char.name !== name) redirect(`/sheet/${char.id}/${char.name}`)
+  if (char.name !== decodeURIComponent(name)) {
+    redirect(`/sheet/${char.id}/${char.name}`)
+  }
 
   return <Sheet character={char.toJSON()} />
 }
