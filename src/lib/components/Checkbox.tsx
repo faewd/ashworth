@@ -7,7 +7,7 @@ type CheckboxProps = Omit<JSX.IntrinsicElements["input"] & { type: "text" }, "ty
     readonly?: boolean;
   }
 
-const checkboxClasses = "appearance-none w-[1em] aspect-square bg-zinc-800 rounded-sm cursor-pointer align-middle checked:bg-indigo-300"
+const checkboxClasses = "appearance-none w-[1em] aspect-square bg-zinc-300/10 rounded-sm cursor-pointer align-middle checked:bg-indigo-300"
 const readonlyClasses = "inline-block cursor-default [&[data-checked='true']]:bg-indigo-300"
 
 export default function Checkbox({ className, label, readonly, ...props }: CheckboxProps) {

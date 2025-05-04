@@ -19,7 +19,7 @@ export default function TristateCheckbox({ value, onChange, label, className, re
   }
 
   const classes = cx(
-    "appearance-none w-[1em] aspect-square bg-zinc-800 rounded-sm cursor-pointer align-middle",
+    "appearance-none w-[1em] aspect-square bg-zinc-300/10 rounded-sm cursor-pointer align-middle",
     {
       ["inline-block cursor-default"]: readonly,
       ["bg-indigo-300"]: value === 1, 

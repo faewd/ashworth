@@ -22,7 +22,7 @@ export default function SkillsList({ skills, patchable, readonly }: SkillsListPr
       <Heading rank={3} className="mt-4 sm:mt-0">Skills</Heading>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-[repeat(2,min-content)] gap-x-10 md:gap-x-6 gap-y-1">
         {entries.map(([skill, data]) => (
-          <div key={skill} className="flex justify-between items-center">
+          <div key={skill} className="group flex justify-between items-center rounded transition-colors hover:bg-zinc-800 -ml-2 pl-2">
             <TristateCheckbox 
               value={data.proficiency}
               onChange={patch((draft, value) => draft.skills[skill].proficiency = value)}
@@ -36,7 +36,7 @@ export default function SkillsList({ skills, patchable, readonly }: SkillsListPr
               }
               readonly={readonly}
             />
-            <Output value={data.modifier} showSign className="shrink-0 grow-0 ml-2" />
+            <Output value={data.modifier} showSign className="shrink-0 grow-0 ml-2 transition-colors group-hover:bg-indigo-400/25" />
           </div>
         ))}
       </div>
