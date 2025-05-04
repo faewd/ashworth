@@ -12,6 +12,7 @@ export async function ensureDB(): Promise<Connection> {
   if (conn !== null) return conn
   const cnx = await mongoose.connect(MONGODB_URI!, {
     authSource: "admin",
+    dbName: "ashworth",
   })
   conn = cnx.connection
 
