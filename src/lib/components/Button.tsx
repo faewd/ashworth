@@ -91,7 +91,7 @@ export default function Button(props: ButtonProps) {
   const colors = props.ghost ? ghostColors : btnColors
   const colorClasses = colors[props.disabled ? "disabled" : (props.color ?? "primary")]
 
-  return <B {...bProps} className={cx("flex gap-2 items-center justify-center rounded py-1 px-2 text-zinc-50 font-semibold cursor-pointer transition-colors", colorClasses, { "p-2": hasIcon && !props.children }, props.className)}>
+  return <B {...bProps} className={cx("flex gap-2 items-center justify-center rounded py-1 px-2 text-zinc-50 font-semibold cursor-pointer transition-colors whitespace-nowrap", colorClasses, { "p-2": hasIcon && !props.children }, props.className)}>
     {hasIcon
       ? <>
           <props.icon {...Object.assign({}, { absoluteStrokeWidth: true, strokeWidth: 2.5, size: 16 }, props.iconProps ?? {})} />

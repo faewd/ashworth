@@ -78,3 +78,11 @@ export async function updateCharacter(id: string, char: Partial<ICharacter>): Pr
   if (updated === null) throw new Error("No such character")
   return new Sheet(updated.toObject())
 }
+
+export async function deleteCharacter(id: string, owner: IUser): Promise<void> {
+  await ensureDB()
+  const character = await Character.findOne({ id }).populate("owner")
+  if (character === null) throw new Error("No such character")
+  if (owner.id !== character.owner.id) throw new Error("The character's owner must delete the sheet.")
+  await character.deleteOne()
+}

@@ -7,13 +7,16 @@ import TextInput from "../../../../lib/components/TextInput"
 import usePatchable from "@/lib/hooks/usePatchable"
 import AbilitiesTable from "./AbilitiesTable"
 import { useCallback, useEffect, useState } from "react"
-import { Clipboard, ClipboardCheck, CloudAlert, TriangleAlert } from "lucide-react"
+import { Clipboard, ClipboardCheck, CloudAlert, Trash, TriangleAlert } from "lucide-react"
 import Spinner from "@/lib/components/Spinner"
 import Checkbox from "@/lib/components/Checkbox"
 import Button from "@/lib/components/Button"
 import NameField from "./NameField"
 import { ISheet, Sheet } from "@/lib/sheet/sheet"
 import SkillsList from "./SkillsList"
+import Heading from "@/lib/components/Heading"
+import { useModal } from "@/lib/context/modalContext"
+import DeleteModal from "@/lib/components/DeleteModal"
 
 type SheetProps = {
   character: ISheet;
@@ -43,6 +46,13 @@ export default function SheetComponent({ character, readonly }: SheetProps) {
 
   const { data, patch, patchText, patchNumeric, patchCheckbox } = patchable
  
+  const modal = useModal()
+
+  useEffect(() => {
+    modal.closeAll()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const [hasCopiedId, setHasCopiedId] = useState(false)
 
   function copyId() {
@@ -132,6 +142,15 @@ export default function SheetComponent({ character, readonly }: SheetProps) {
           <AbilitiesTable abilityScores={sheet.abilityScores} patchable={patchable} readonly={readonly} />
           <SkillsList skills={sheet.skills} patchable={patchable} readonly={readonly} />
         </section>
+        {readonly || (
+          <section className="mt-2">
+            <Heading rank={3} className="text-rose-300 mb-4">Danger Zone</Heading>
+            <div className="flex items-center gap-4 p-2 px-4 rounded bg-rose-950/20 max-w-[60ch] text-rose-300">
+              <Button onClick={() => {modal.show(<DeleteModal char={character} />, "Delete Character")}} color="error" icon={Trash}>Delete</Button>
+              This action is irreversible. If you have synchronised this sheet with Miniroll, you will no longer be able to use its stats in rolls.
+            </div>
+          </section>
+        )}
       </article>
     </div>
   )
