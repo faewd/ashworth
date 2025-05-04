@@ -31,6 +31,10 @@ const eslintConfig: Linter.Config[] = [
           requireLast: false,
         },
       }],
+      "@typescript-eslint/no-unused-vars": ["error", {
+        varsIgnorePattern: "^_|[iI]gnored",
+        argsIgnorePattern: "^_|[iI]gnored",
+      }],
     },
   },
 ]
