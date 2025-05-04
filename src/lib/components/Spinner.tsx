@@ -4,7 +4,7 @@ import cx from "@/lib/util/cx"
 
 type SpinnerProps = {
   color?: "primary" | "secondary" | "error" | "warn" | "info" | "success";
-  className?: ClassValue
+  className?: ClassValue;
 }
 
 const spinnerColors = {

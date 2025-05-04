@@ -8,11 +8,11 @@ type PatchFunc<T, R> = (draft: Draft<T>, value: R) => void
 type Patcher<R> = (value: R) => void
 
 export type Patchable<T> = {
-  data: T,
-  patch: PatcherMaker<T>,
-  patchText: (f: PatchFunc<T, string>) => Patcher<ChangeEvent<HTMLInputElement>>,
-  patchCheckbox: (f: PatchFunc<T, boolean>) => Patcher<ChangeEvent<HTMLInputElement>>,
-  patchNumeric: (f: PatchFunc<T, number>, fallback?: number) => Patcher<ChangeEvent<HTMLInputElement>>,
+  data: T;
+  patch: PatcherMaker<T>;
+  patchText: (f: PatchFunc<T, string>) => Patcher<ChangeEvent<HTMLInputElement>>;
+  patchCheckbox: (f: PatchFunc<T, boolean>) => Patcher<ChangeEvent<HTMLInputElement>>;
+  patchNumeric: (f: PatchFunc<T, number>, fallback?: number) => Patcher<ChangeEvent<HTMLInputElement>>;
 }
 
 export default function usePatchable<T>(initialData: T, onChange?: (data: T) => void): Patchable<T> {

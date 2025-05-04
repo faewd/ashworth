@@ -3,9 +3,9 @@ import { ReactNode } from "react"
 import cx from "../util/cx"
 
 type AlertProps = {
-  color?: "primary" | "secondary" | "error" | "warn" | "info" | "success",
-  className?: ClassValue,
-  children: ReactNode
+  color?: "primary" | "secondary" | "error" | "warn" | "info" | "success";
+  className?: ClassValue;
+  children: ReactNode;
 }
 
 const alertColors = {

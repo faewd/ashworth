@@ -4,10 +4,10 @@ import cx from "@/lib/util/cx"
 import { LucideIcon, LucideProps } from "lucide-react"
 
 type BaseButtonProps = {
-  color?: "primary" | "secondary" | "error" | "warn" | "info" | "success"
-  ghost?: boolean
-  disabled?: boolean
-  className?: ClassValue
+  color?: "primary" | "secondary" | "error" | "warn" | "info" | "success";
+  ghost?: boolean;
+  disabled?: boolean;
+  className?: ClassValue;
 } & (
   | { children: ReactNode }
   | IconProps
@@ -16,14 +16,14 @@ type BaseButtonProps = {
 export type IconProps = {
   children?: ReactNode;
   icon: LucideIcon;
-  iconProps?: Partial<Omit<LucideProps, "icon">>
+  iconProps?: Partial<Omit<LucideProps, "icon">>;
 }
 
 export type ButtonProps = LinkButtonProps | TrueButtonProps | SubmitButtonProps
 
 export type LinkButtonProps = BaseButtonProps & {
-  href: string
-  newTab?: boolean
+  href: string;
+  newTab?: boolean;
 }
 
 export type TrueButtonProps = BaseButtonProps & {
@@ -31,7 +31,7 @@ export type TrueButtonProps = BaseButtonProps & {
 }
 
 export type SubmitButtonProps = BaseButtonProps & {
-  submit: true
+  submit: true;
 }
 
 const btnColors = {

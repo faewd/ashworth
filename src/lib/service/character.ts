@@ -1,9 +1,10 @@
-import { ensureDB } from "../db"
-import { Character, ICharacter } from "../models/character"
+import { ensureDB } from "@/lib/db"
+import { Character, ICharacter, Proficiency } from "@/lib/models/character"
 import { Doc } from "./doc"
-import { IUser } from "../models/user"
+import { IUser } from "@/lib/models/user"
 import { nanoid } from "nanoid"
-import { Sheet } from "../sheet/sheet"
+import { Sheet } from "@/lib/sheet/sheet"
+import { skills } from "@/lib/data/skills"
 
 export async function createCharacter(name: string, owner: Doc<IUser>): Promise<Sheet> {
   await ensureDB()
@@ -54,6 +55,7 @@ export async function createCharacter(name: string, owner: Doc<IUser>): Promise<
         proficient: false,
       },
     },
+    skills: Object.fromEntries(Object.keys(skills).map((skill) => [skill, { proficiency: Proficiency.NONE, tempBonus: 0 }])),
   })
   const character = await newChar.save()
 

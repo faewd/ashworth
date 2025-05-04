@@ -1,12 +1,13 @@
 import mongoose, { Model, SchemaTypes } from "mongoose"
 import { IUser } from "./user"
-import { ensureDB } from "../db"
+import { ensureDB } from "@/lib/db"
+import { skills } from "@/lib/data/skills"
 
 export interface AbilityScore {
-  base: number
-  bonus: number
-  tempBonus: number
-  proficient: boolean
+  base: number;
+  bonus: number;
+  tempBonus: number;
+  proficient: boolean;
 }
 
 const AbilityScoreSchema = new mongoose.Schema<AbilityScore>({
@@ -34,6 +35,30 @@ const AbilityScoresSchema = new mongoose.Schema<AbilityScores>({
   cha: AbilityScoreSchema,
 }, { _id: false })
 
+export enum Proficiency {
+  NONE = 0,
+  PROFICIENT = 1,
+  EXPERT = 2,
+}
+
+export type Skill = {
+  proficiency: Proficiency;
+  tempBonus: number;
+}
+
+const SkillSchema = new mongoose.Schema<Skill>({
+  proficiency: Number,
+  tempBonus: Number,
+}, { _id: false })
+
+export type Skills = {
+  [key in keyof typeof skills]: Skill
+}
+
+const SkillsSchema = new mongoose.Schema<Skills>(Object.fromEntries(
+  Object.keys(skills).map((skill) => [skill, SkillSchema]),
+), { _id: false })
+
 export interface ICharacter {
   id: string;
   owner: IUser;
@@ -42,7 +67,8 @@ export interface ICharacter {
   species: string;
   class: string;
   level: number;
-  abilityScores: AbilityScores
+  abilityScores: AbilityScores;
+  skills: Skills;
 }
 
 export const CharacterSchema = new mongoose.Schema<ICharacter>({
@@ -54,6 +80,7 @@ export const CharacterSchema = new mongoose.Schema<ICharacter>({
   class: String,
   level: Number,
   abilityScores: AbilityScoresSchema,
+  skills: SkillsSchema,
 })
 
 const db = await ensureDB()

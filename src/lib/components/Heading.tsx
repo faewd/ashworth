@@ -5,7 +5,7 @@ import cx from "@/lib/util/cx"
 type HeadingProps = {
   rank: 1 | 2 | 3 | 4 | 5 | 6;
   className?: ClassValue;
-  children: ReactNode
+  children: ReactNode;
 }
 
 const headingClasses = {

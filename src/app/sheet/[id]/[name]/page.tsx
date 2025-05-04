@@ -6,9 +6,9 @@ import { redirect } from "next/navigation"
 
 type SheetPageProps = {
   params: Promise<{
-    id: string,
-    name: string
-  }>
+    id: string;
+    name: string;
+  }>;
 }
 
 export default async function SheetPage({ params }: SheetPageProps) {

@@ -13,10 +13,11 @@ import Checkbox from "@/lib/components/Checkbox"
 import Button from "@/lib/components/Button"
 import NameField from "./NameField"
 import { ISheet, Sheet } from "@/lib/sheet/sheet"
+import SkillsList from "./SkillsList"
 
 type SheetProps = {
-  character: ISheet,
-  readonly: boolean
+  character: ISheet;
+  readonly: boolean;
 }
 
 function debounce<T extends unknown[]>(f: (...args: T) => void, duration: number) {
@@ -121,8 +122,9 @@ export default function SheetComponent({ character, readonly }: SheetProps) {
             <TextInput value={sheet.level} onChange={patchNumeric((draft, value) => draft.level = value)} readOnly={readonly} />
           </InputGroup>
         </section>
-        <section className="mt-6 grid grid-cols-2">
+        <section className="mt-6 grid grid-cols-2 gap-8">
           <AbilitiesTable abilityScores={sheet.abilityScores} patchable={patchable} readonly={readonly} />
+          <SkillsList skills={sheet.skills} patchable={patchable} readonly={readonly} />
         </section>
       </article>
     </div>

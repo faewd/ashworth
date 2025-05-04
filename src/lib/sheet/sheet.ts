@@ -1,5 +1,6 @@
-import { AbilityScore, AbilityScores, ICharacter } from "../models/character"
-import { IUser } from "../models/user"
+import { AbilityScore, AbilityScores, ICharacter, Skill, Skills } from "@/lib/models/character"
+import { IUser } from "@/lib/models/user"
+import { skills } from "@/lib/data/skills"
 
 export type ResolvedAbilityScore = AbilityScore & {
   totalBonus: number;
@@ -12,8 +13,19 @@ export type ResolvedAbilityScores = {
   [key in keyof AbilityScores]: ResolvedAbilityScore
 }
 
+export type ResolvedSkill = Skill & {
+  baseModifer: number;
+  modifier: number;
+  passive: number;
+}
+
+export type ResolvedSkills = {
+  [key in keyof Skills]: ResolvedSkill
+}
+
 export interface ISheet extends ICharacter {
-  abilityScores: ResolvedAbilityScores
+  abilityScores: ResolvedAbilityScores;
+  skills: ResolvedSkills;
 }
 
 export class Sheet implements ISheet {
@@ -72,12 +84,33 @@ export class Sheet implements ISheet {
     return Object.fromEntries(resolved)
   }
 
+  get skills(): ResolvedSkills {
+    const entries = Object.entries(this.data.skills) as (readonly [keyof Skills, Skill])[]
+    const abilities = this.abilityScores
+    const resolved = entries.map(([skillId, { tempBonus, proficiency }]) => {
+      const skill = skills[skillId]
+      const baseModifier = abilities[skill.baseAbility].modifier
+      const modifier = baseModifier + tempBonus + (this.proficiencyBonus * proficiency)
+
+      return [skillId, {
+        proficiency,
+        tempBonus,
+        base: baseModifier,
+        modifier,
+        passive: 10 + modifier,
+      }]
+    })
+
+    return Object.fromEntries(resolved)
+  }
+
   private getStatRecord(): Record<string, number> {
     return {
       "PB": this.proficiencyBonus,
       "LEVEL": this.level,
       "LVL": this.level,
       ...this.getAbilityStats(),
+      ...this.getSkillStats(),
     }
   }
 
@@ -95,7 +128,21 @@ export class Sheet implements ISheet {
     return Object.fromEntries(flat)
   }
 
-  public toJSON() {
+  private getSkillStats(): Record<string, number> {
+    const entries = Object.entries(this.skills)
+    const flat = entries
+      .map(([skill, data]) => [skill.toUpperCase(), data] as const)
+      .flatMap(([skill, s]) => [
+        [`${skill}.BASE`, s.baseModifer],
+        [`${skill}.BONUS`, s.tempBonus],
+        [`${skill}.PASSIVE`, s.passive],
+        [`${skill}.PB`, s.proficiency * this.proficiencyBonus],
+        [skill, s.modifier],
+      ])
+    return Object.fromEntries(flat)
+  }
+
+  public toJSON(): ISheet & { proficiencyBonus: number; stats: Record<string, number> } {
     return {
       id: this.id,
       name: this.name,
@@ -110,6 +157,7 @@ export class Sheet implements ISheet {
       level: this.level,
       proficiencyBonus: this.proficiencyBonus,
       abilityScores: this.abilityScores,
+      skills: this.skills,
       stats: this.getStatRecord(),
     }
   }

@@ -21,7 +21,7 @@ export async function getCurrentUser(): Promise<Doc<IUser> | null> {
 }
 
 export type Profile = IUser & {
-  characters: Sheet[]
+  characters: Sheet[];
 }
 
 export async function getUserProfile(): Promise<Profile | null> {

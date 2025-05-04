@@ -2,7 +2,7 @@ import { ReactNode } from "react"
 
 type InputGroupProps = {
   label: string;
-  children: ReactNode
+  children: ReactNode;
 }
 
 export default function InputGroup({ label, children }: InputGroupProps) {

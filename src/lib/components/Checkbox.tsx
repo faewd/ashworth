@@ -1,10 +1,10 @@
-import { cloneElement, JSX } from "react"
+import { cloneElement, JSX, ReactNode } from "react"
 import cx from "../util/cx"
 
 type CheckboxProps = Omit<JSX.IntrinsicElements["input"] & { type: "text" }, "type" | "readOnly">
   & {
-    label?: string,
-    readonly?: boolean
+    label?: ReactNode;
+    readonly?: boolean;
   }
 
 const checkboxClasses = "appearance-none w-[1em] aspect-square bg-zinc-800 rounded-sm cursor-pointer align-middle checked:bg-indigo-300"
@@ -20,7 +20,7 @@ export default function Checkbox({ className, label, readonly, ...props }: Check
   }
 
   return (
-    <label className={cx("flex gap-2 items-center", className)}>
+    <label className={cx("flex gap-2 items-center whitespace-nowrap", className)}>
       {cloneElement(input, { className: checkboxClasses })}
       <span className="font-semibold">{label}</span>
     </label>
