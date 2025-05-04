@@ -21,6 +21,16 @@ const eslintConfig: Linter.Config[] = [
     rules: {
       "@stylistic/semi": ["error", "never"],
       "@stylistic/comma-dangle": ["error", "always-multiline"],
+      "@stylistic/member-delimiter-style": ["error", {
+        multiline: {
+          delimiter: "semi",
+          requireLast: true,
+        },
+        singleline: {
+          delimiter: "semi",
+          requireLast: false,
+        },
+      }],
     },
   },
 ]
