@@ -87,8 +87,8 @@ export default function SheetComponent({ character, readonly }: SheetProps) {
   }, [data, save])
 
   return (
-    <div className="flex justify-center">
-      <article className="pt-8">
+    <div className="flex justify-center px-4">
+      <article className="pt-8 max-w-[960px]">
         <section>
           <div className="flex items-center">
             <NameField value={sheet.name} onChange={patch((draft, value) => draft.name = value)} readonly={readonly} />
@@ -128,7 +128,7 @@ export default function SheetComponent({ character, readonly }: SheetProps) {
             <TextInput value={sheet.background} onChange={patchText((draft, value) => draft.background = value)} readOnly={readonly} />
           </InputGroup>
         </section>
-        <section className="mt-6 grid grid-cols-2 gap-8">
+        <section className="mt-6 md:flex w-full justify-between gap-8">
           <AbilitiesTable abilityScores={sheet.abilityScores} patchable={patchable} readonly={readonly} />
           <SkillsList skills={sheet.skills} patchable={patchable} readonly={readonly} />
         </section>

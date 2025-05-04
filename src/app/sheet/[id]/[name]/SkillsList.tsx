@@ -19,8 +19,8 @@ export default function SkillsList({ skills, patchable, readonly }: SkillsListPr
 
   return (
     <div>
-      <Heading rank={3}>Skills</Heading>
-      <div className="grid grid-cols-2 gap-x-6 gap-y-1">
+      <Heading rank={3} className="mt-4 sm:mt-0">Skills</Heading>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-[repeat(2,min-content)] gap-x-10 md:gap-x-6 gap-y-1">
         {entries.map(([skill, data]) => (
           <div key={skill} className="flex justify-between items-center">
             <TristateCheckbox 
