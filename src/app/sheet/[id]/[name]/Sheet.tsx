@@ -7,7 +7,7 @@ import TextInput from "../../../../lib/components/TextInput"
 import usePatchable from "@/lib/hooks/usePatchable"
 import AbilitiesTable from "./AbilitiesTable"
 import { useCallback, useEffect, useState } from "react"
-import { Clipboard, ClipboardCheck, CloudAlert, Trash, TriangleAlert } from "lucide-react"
+import { Clipboard, ClipboardCheck, CloudAlert, Pencil, Trash, TriangleAlert } from "lucide-react"
 import Spinner from "@/lib/components/Spinner"
 import Checkbox from "@/lib/components/Checkbox"
 import Button from "@/lib/components/Button"
@@ -17,6 +17,8 @@ import SkillsList from "./SkillsList"
 import Heading from "@/lib/components/Heading"
 import { useModal } from "@/lib/context/modalContext"
 import DeleteModal from "@/lib/components/DeleteModal"
+import Output from "@/lib/components/Output"
+import ClassLevelsModal from "./ClassLevelsModal"
 
 type SheetProps = {
   character: ISheet;
@@ -44,7 +46,7 @@ export default function SheetComponent({ character, readonly }: SheetProps) {
     setModified(true)
   })
 
-  const { data, patch, patchText, patchNumeric, patchCheckbox } = patchable
+  const { data, patch, patchText, patchCheckbox } = patchable
  
   const modal = useModal()
 
@@ -96,6 +98,10 @@ export default function SheetComponent({ character, readonly }: SheetProps) {
     save(data)
   }, [data, save])
 
+  function showClassLevelsModal() {
+    modal.show(<ClassLevelsModal classes={sheet.classes} onChange={patch((draft, value) => draft.classes = value)} />, "Edit Class Levels")
+  }
+
   return (
     <div className="flex justify-center px-4">
       <article className="pt-8 max-w-[960px]">
@@ -121,18 +127,18 @@ export default function SheetComponent({ character, readonly }: SheetProps) {
             {!readonly && <Checkbox label="Public?" checked={sheet.publiclyVisible} onChange={patchCheckbox((draft, value) => draft.publiclyVisible = value)} className="ml-auto" />}
           </div>
         </section>
-        <section className="grid grid-cols-[min-content_repeat(4,1fr)] gap-2 mt-8">
+        <section className="grid grid-cols-[min-content_repeat(3,1fr)] gap-2 mt-8">
           <InputGroup label="Level">
-            <TextInput className="w-12 text-center" value={sheet.level} onChange={patchNumeric((draft, value) => draft.level = value)} readOnly={readonly} />
+            <Output className="w-12 text-center" value={sheet.level} />
           </InputGroup>
           <InputGroup label="Species">
             <TextInput value={sheet.species} onChange={patchText((draft, value) => draft.species = value)} readOnly={readonly} />
           </InputGroup>
           <InputGroup label="Class">
-            <TextInput value={sheet.class} onChange={patchText((draft, value) => draft.class = value)} readOnly={readonly} />
-          </InputGroup>
-          <InputGroup label="Subclass">
-            <TextInput value={sheet.subclass} onChange={patchText((draft, value) => draft.subclass = value)} readOnly={readonly} />
+            <button onClick={showClassLevelsModal} className="group flex items-center justify-between w-full cursor-pointer text-left bg-zinc-950 px-2 py-1 border-2 border-transparent rounded hover:bg-zinc-950/50 hover:text-indigo-300">
+              {sheet.class}
+              <Pencil className="hidden group-hover:block" size={18} strokeWidth={2.75} />
+            </button>
           </InputGroup>
           <InputGroup label="Background">
             <TextInput value={sheet.background} onChange={patchText((draft, value) => draft.background = value)} readOnly={readonly} />

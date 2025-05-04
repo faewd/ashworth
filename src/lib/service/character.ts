@@ -15,10 +15,8 @@ export async function createCharacter(name: string, owner: Doc<IUser>): Promise<
     owner,
     publiclyVisible: false,
     species: "Human",
-    class: "Fighter",
-    subclass: "",
+    classes: [{ class: "Fighter", subclass: "", level: 1 }],
     background: "Folk Hero",
-    level: 1,
     abilityScores: {
       str: {
         base: 10,

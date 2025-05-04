@@ -59,16 +59,26 @@ const SkillsSchema = new mongoose.Schema<Skills>(Object.fromEntries(
   Object.keys(skills).map((skill) => [skill, SkillSchema]),
 ), { _id: false })
 
+export interface CharacterClass {
+  class: string;
+  level: number;
+  subclass: string;
+}
+
+const ClassSchema = new mongoose.Schema<CharacterClass>({
+  class: String,
+  level: Number,
+  subclass: String,
+}, { _id: false })
+
 export interface ICharacter {
   id: string;
   owner: IUser;
   publiclyVisible: boolean;
   name: string;
   species: string;
-  class: string;
-  subclass: string;
+  classes: CharacterClass[];
   background: string;
-  level: number;
   abilityScores: AbilityScores;
   skills: Skills;
 }
@@ -79,9 +89,7 @@ export const CharacterSchema = new mongoose.Schema<ICharacter>({
   publiclyVisible: { type: Boolean, default: false },
   name: String,
   species: String,
-  class: String,
-  level: Number,
-  subclass: String,
+  classes: [ClassSchema],
   background: String,
   abilityScores: AbilityScoresSchema,
   skills: SkillsSchema,

@@ -1,4 +1,4 @@
-import { AbilityScore, AbilityScores, ICharacter, Skill, Skills } from "@/lib/models/character"
+import { AbilityScore, AbilityScores, CharacterClass, ICharacter, Skill, Skills } from "@/lib/models/character"
 import { IUser } from "@/lib/models/user"
 import { skills } from "@/lib/data/skills"
 
@@ -25,6 +25,8 @@ export type ResolvedSkills = {
 
 export interface ISheet extends ICharacter {
   proficiencyBonus: number;
+  class: string;
+  level: number;
   abilityScores: ResolvedAbilityScores;
   skills: ResolvedSkills;
   stats: Record<string, number>;
@@ -56,11 +58,11 @@ export class Sheet implements ISheet {
   }
 
   get class(): string {
-    return this.data.class
+    return this.data.classes.map((c) => `${c.class} ${c.level}`).join(" / ")
   }
 
-  get subclass(): string {
-    return this.data.subclass
+  get classes(): CharacterClass[] {
+    return this.data.classes
   }
 
   get background(): string {
@@ -68,11 +70,11 @@ export class Sheet implements ISheet {
   }
 
   get level(): number {
-    return this.data.level
+    return this.data.classes.map(c => c.level).reduce((acc, cur) => acc + cur)
   }
 
   get proficiencyBonus(): number {
-    return Math.ceil(this.data.level / 4 + 1)
+    return Math.ceil(this.level / 4 + 1)
   }
 
   get abilityScores(): ResolvedAbilityScores {
@@ -164,7 +166,7 @@ export class Sheet implements ISheet {
       publiclyVisible: this.publiclyVisible,
       species: this.species,
       class: this.class,
-      subclass: this.subclass,
+      classes: this.classes,
       background: this.background,
       level: this.level,
       proficiencyBonus: this.proficiencyBonus,

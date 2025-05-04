@@ -9,6 +9,7 @@ type Patcher<R> = (value: R) => void
 
 export type Patchable<T> = {
   data: T;
+  patchOnce: (f: (draft: Draft<T>) => void) => void;
   patch: PatcherMaker<T>;
   patchText: (f: PatchFunc<T, string>) => Patcher<ChangeEvent<HTMLInputElement>>;
   patchCheckbox: (f: PatchFunc<T, boolean>) => Patcher<ChangeEvent<HTMLInputElement>>;
@@ -18,21 +19,20 @@ export type Patchable<T> = {
 export default function usePatchable<T>(initialData: T, onChange?: (data: T) => void): Patchable<T> {
   const [data, setData] = useState<T>(initialData)
 
-  const patch = useMemo<PatcherMaker<T>>(() => {
+  const patchOnce = useMemo<(f: (draft: Draft<T>) => void) => void>(() => {
     return f => {
-      return value => {
-        const [next, patches] = produceWithPatches(data, draft => { f(draft, value) })
-        if (patches.length > 0) {
-          setData(next)
-          onChange?.(next)
-        }
+      const [next, patches] = produceWithPatches(data, draft => { f(draft) })
+      if (patches.length > 0) {
+        setData(next)
+        onChange?.(next)
       }
     }
-  }, [data, onChange]) 
+  }, [data, onChange])
+
+  const patch: PatcherMaker<T> = f => value => patchOnce(draft => { f(draft, value) })
 
   const patchText = (f: PatchFunc<T, string>) => patch((draft, e: ChangeEvent<HTMLInputElement>) => f(draft, e.currentTarget.value))
   const patchCheckbox = (f: PatchFunc<T, boolean>) => patch((draft, e: ChangeEvent<HTMLInputElement>) => f(draft, e.currentTarget.checked))
-
 
   const patchNumeric = (f: PatchFunc<T, number>, fallback: number = 0) => patch((draft, e: ChangeEvent<HTMLInputElement>) => {
       const num = parseInt(e.target.value, 10)
@@ -40,5 +40,5 @@ export default function usePatchable<T>(initialData: T, onChange?: (data: T) => 
       f(draft, isNaN(num) ? fallback : num)
   })
 
-  return { data, patch, patchText, patchCheckbox, patchNumeric }
+  return { data, patchOnce, patch, patchText, patchCheckbox, patchNumeric }
 }
