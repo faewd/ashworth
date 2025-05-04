@@ -20,6 +20,9 @@ export default function AbilitiesTable({ abilityScores, patchable, readonly }: A
 
   const entries = Object.entries(abilityScores) as [keyof ResolvedAbilityScores, ResolvedAbilityScore][]
 
+  const pointBuyValue = entries.reduce((acc, [_, ability]) => acc + Math.max(0, ability.base - 8) + Math.max(0, ability.base - 14) * 2, 0)
+  const totalValue = entries.reduce((acc, [_, ability]) => acc + ability.base, 0)
+
   return (
     <section className="grow">
       <Heading rank={3} className="mb-2">Ability Scores</Heading>
@@ -51,6 +54,12 @@ export default function AbilitiesTable({ abilityScores, patchable, readonly }: A
           ))}
         </tbody>
       </table>
+      <div className="flex justify-end mt-1 mx-1">
+        <div className="flex gap-4 text-zinc-500 rounded py-2 px-3 bg-zinc-500/5">
+          <div>Total: <span className="font-semibold">{totalValue}</span></div>
+          <div>Point Buy: <span className="font-semibold">{pointBuyValue}</span>/27</div>
+        </div>
+      </div>
     </section>
   )
 }
