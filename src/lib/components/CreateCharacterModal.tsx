@@ -36,6 +36,7 @@ export default function CreateCharacterModal() {
         console.error(err)
         if (err instanceof Error) setError(err.message)
         else if (typeof err === "string") setError(err)
+        else if (typeof err.error === "string") setError(err.error.replace('"value"', '"name"'))
         else setError("An unexpected error ocurred :(")
       })
       .finally(() => {

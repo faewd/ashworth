@@ -89,6 +89,7 @@ export default function SheetComponent({ character, readonly }: SheetProps) {
         console.error(err)
         if (err instanceof Error) setError(err.message)
         else if (typeof err === "string") setError(err)
+        else if (typeof err.error === "string") setError(err.error)
         else setError("An unexpected error ocurred :(")
         setSaving(false)
       })

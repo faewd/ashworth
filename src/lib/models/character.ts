@@ -2,6 +2,7 @@ import mongoose, { Model, SchemaTypes } from "mongoose"
 import { IUser } from "./user"
 import { ensureDB } from "@/lib/db"
 import { skills } from "@/lib/data/skills"
+import Joi from "joi"
 
 export interface AbilityScore {
   base: number;
@@ -9,6 +10,13 @@ export interface AbilityScore {
   tempBonus: number;
   proficient: boolean;
 }
+
+const abilityScoreValidator = Joi.object({
+  base: Joi.number().required().positive(),
+  bonus: Joi.number().required(),
+  tempBonus: Joi.number().required(),
+  proficient: Joi.boolean().required(),
+})
 
 const AbilityScoreSchema = new mongoose.Schema<AbilityScore>({
   base: { type: Number, default: 10 },
@@ -25,6 +33,15 @@ export interface AbilityScores {
   wis: AbilityScore;
   cha: AbilityScore;
 }
+
+const abilityScoresValidator = Joi.object({
+  str: abilityScoreValidator,
+  dex: abilityScoreValidator,
+  con: abilityScoreValidator,
+  int: abilityScoreValidator,
+  wis: abilityScoreValidator,
+  cha: abilityScoreValidator,
+})
 
 const AbilityScoresSchema = new mongoose.Schema<AbilityScores>({
   str: AbilityScoreSchema,
@@ -46,6 +63,11 @@ export type Skill = {
   tempBonus: number;
 }
 
+const skillValidator = Joi.object({
+  proficiency: Joi.allow(1, 2, 3),
+  tempBonus: Joi.number().required(),
+})
+
 const SkillSchema = new mongoose.Schema<Skill>({
   proficiency: Number,
   tempBonus: Number,
@@ -54,6 +76,10 @@ const SkillSchema = new mongoose.Schema<Skill>({
 export type Skills = {
   [key in keyof typeof skills]: Skill
 }
+
+const skillsValidator = Joi.object(Object.fromEntries(
+  Object.keys(skills).map((skill) => [skill, skillValidator]),
+))
 
 const SkillsSchema = new mongoose.Schema<Skills>(Object.fromEntries(
   Object.keys(skills).map((skill) => [skill, SkillSchema]),
@@ -64,6 +90,12 @@ export interface CharacterClass {
   level: number;
   subclass: string;
 }
+
+const classValidator = Joi.object({
+  class: Joi.string().required().max(50),
+  level: Joi.number().required().min(1).max(25),
+  subclass: Joi.string().min(0).max(50),
+})
 
 const ClassSchema = new mongoose.Schema<CharacterClass>({
   class: String,
@@ -82,6 +114,16 @@ export interface ICharacter {
   abilityScores: AbilityScores;
   skills: Skills;
 }
+
+export const characterValidator = Joi.object({
+  publiclyVisible: Joi.boolean().required(),
+  name: Joi.string().required().min(1).max(50),
+  species: Joi.string().required().max(50),
+  classes: Joi.array().items(classValidator),
+  background: Joi.string().required().max(50),
+  abilityScores: abilityScoresValidator,
+  skills: skillsValidator,
+})
 
 export const CharacterSchema = new mongoose.Schema<ICharacter>({
   id: String,

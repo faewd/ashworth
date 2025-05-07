@@ -1,6 +1,9 @@
+import { withErrorHandling } from "@/lib/error"
 import { getUserProfile } from "@/lib/service/user"
 
 export async function GET() {
-  const profile = await getUserProfile()
-  return Response.json(profile)
+  return withErrorHandling(async () => {
+    const profile = await getUserProfile()
+    return Response.json(profile)
+  })
 }
